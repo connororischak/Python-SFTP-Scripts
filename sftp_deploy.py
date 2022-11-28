@@ -14,7 +14,7 @@
 #   - pip install jira
 
 # 5. To launch the application:
-#   - python create_new_sftp.py
+#   - python sftp_deploy.py
 
 # 6. (optional) 
 # If you want to also use Jira Shell:
