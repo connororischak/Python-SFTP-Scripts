@@ -118,7 +118,8 @@ def makeFile():
     yml.write(f'  sftp_customer_full_name: "{customer}"\n')
     yml.write(f'  sftp_date_creation: "{today}"\n')
     yml.write(f'  sftp_pub_keys_ukg:\n')
-    yml.write(f'  - key: "{key[0]}"\n    ticket_date: "{today}"\n    ticket_ref: "https://people-doc.atlassian.net/browse/INT-{ticketNo}"\n')
+    for i in range(len(key)):
+        yml.write(f'  - key: "{key[i]}"\n    ticket_date: "{today}"\n    ticket_ref: "https://people-doc.atlassian.net/browse/INT-{ticketNo}"\n')
     print(f'\n\t{sftp_username}.yml created at {ymlPath}')
 
 
