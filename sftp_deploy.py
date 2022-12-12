@@ -2,8 +2,10 @@
 
 # Please create an environment variable by doing:
 #   nano ~/.zprofile
-#   add this line to that file
+#   add these lines to that file
 #       export YML_BASE_PATH='[your home directory]' example /Users/[username]/
+#       export JIRA_USER=[your jira login email]
+#       export JIRA_KEY=[your jira API key]
 #   Also review the mapEnv() function to make sure your SFTP Git repo directories are the same
 
 # 1. if you don't have pip:
@@ -34,7 +36,7 @@ from jira import JIRA
 
 jiraOptions = {'server': "https://people-doc.atlassian.net"}
 
-jira = JIRA(options = jiraOptions, basic_auth = ('','')) # ('your jira email','your jira api key')
+jira = JIRA(options = jiraOptions, basic_auth = (os.environ['JIRA_USER'],os.environ['JIRA_KEY'])) # ('your jira email','your jira api key')
 
 global sftp_username
 sftp_username = ''
