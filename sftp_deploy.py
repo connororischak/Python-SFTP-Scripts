@@ -101,7 +101,7 @@ def getInfo():
 def makeFile():
     global issue
     titles = issue.fields.summary.split(' - ')
-    if titles[0] != 'ACN': 
+    if titles[0] not in ('ACN','Partner'): 
         customer = titles[1]
     else:
         customer = titles[2]
