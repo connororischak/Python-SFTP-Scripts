@@ -1,5 +1,11 @@
 # Prerequisites:
 
+# Please create an environment variable by doing:
+#   nano ~/.zprofile
+#   add this line to that file
+#       export YML_BASE_PATH='[your home directory]' example /Users/[username]/
+#   Also review the mapEnv() function to make sure your SFTP Git repo directories are the same
+
 # 1. if you don't have pip:
 #   - brew install pip
 
@@ -23,7 +29,7 @@
 # Launch with
 #   - jirashell -s https://people-doc.atlassian.net -u [your-jira-email] -p [your-api-token]
 import datetime
-import sys
+import os
 from jira import JIRA
 
 jiraOptions = {'server': "https://people-doc.atlassian.net"}
@@ -37,6 +43,8 @@ pc_env = ''
 global subType
 subType = ''
 global ymlPath
+global basePath
+basePath = os.environ['YML_BASE_PATH']
 ymlPath = ''
 global issue
 global ticketNo
@@ -72,7 +80,7 @@ if runMode.upper() == 'L':
 
 def test():
     global ymlPath
-    ymlPath = '' # put a file path here where you'd like yml's placed locally for test mode.
+    ymlPath = f'{basePath}Desktop/sftp_test/' # create a folder called sftp_test on your Desktop.
     print(f'\n[TESTING MODE] YML filepath: {ymlPath}')
 
 
@@ -137,17 +145,17 @@ def mapEnv():
     global pc_env
     global ymlPath
     if pc_env == 'prod-atl': 
-        ymlPath = '/Users/ConnorO/pdoc_repos/peopledoc-sftp-accounts/host_vars/atl.ucloud.int/eeyore-0.atl.ucloud.int/customers/'
+        ymlPath = f'{basePath}pdoc_repos/peopledoc-sftp-accounts/host_vars/atl.ucloud.int/eeyore-0.atl.ucloud.int/customers/'
     elif pc_env == 'prod-tor':
-        ymlPath = '/Users/ConnorO/pdoc_repos/peopledoc-sftp-accounts/host_vars/tor.ucloud.int/eeyore-0.tor.ucloud.int/customers/'
+        ymlPath = f'{basePath}pdoc_repos/peopledoc-sftp-accounts/host_vars/tor.ucloud.int/eeyore-0.tor.ucloud.int/customers/'
     elif pc_env == 'prod-eu':
-        ymlPath = '/Users/ConnorO/pdoc_repos/peopledoc-sftp-accounts/host_vars/de.people-doc.net/eeyore-0.de.people-doc.net/customers/ '
+        ymlPath = f'{basePath}pdoc_repos/peopledoc-sftp-accounts/host_vars/de.people-doc.net/eeyore-0.de.people-doc.net/customers/ '
     elif pc_env == 'prod-us':
-        ymlPath = '/Users/ConnorO/pdoc_repos/peopledoc-sftp-accounts/host_vars/us.people-doc.net/eeyore-000.us.people-doc.net/customers/'
+        ymlPath = f'{basePath}pdoc_repos/peopledoc-sftp-accounts/host_vars/us.people-doc.net/eeyore-000.us.people-doc.net/customers/'
     elif pc_env == 'staging-us':
-        ymlPath = '/Users/ConnorO/pdoc_repos/peopledoc-sftp-accounts/host_vars/staging.us.people-doc.net/staging-depot-0.staging.us.people-doc.net/customers/'
+        ymlPath = f'{basePath}pdoc_repos/peopledoc-sftp-accounts/host_vars/staging.us.people-doc.net/staging-depot-0.staging.us.people-doc.net/customers/'
     elif pc_env == 'staging-eu':
-        ymlPath = '/Users/ConnorO/pdoc_repos/peopledoc-sftp-accounts/host_vars/staging.eu.people-doc.net/staging-depot-0.staging.eu.people-doc.net/customers/'
+        ymlPath = f'{basePath}pdoc_repos/peopledoc-sftp-accounts/host_vars/staging.eu.people-doc.net/staging-depot-0.staging.eu.people-doc.net/customers/'
     print(f'\n[LIVE MODE] YML filepath: {ymlPath}')
 
 
