@@ -107,8 +107,8 @@ def makeFile():
         customer = titles[2]
     jdate = issue.fields.created
     dates = jdate.split('T')
-    dt = datetime.datetime.strptime(dates[0],"%Y-%m-%d")
-    today = f"{dt.month}-{dt.day}-{dt.year}"
+    dt = datetime.datetime.strptime(dates[0], "%Y-%m-%d")
+    today = str(dt).split(' ')[0]
     key = str(issue.fields.customfield_11084).split('\n\n')
     yml = open(f'{ymlPath}{sftp_username}.yml','x')
     yml.write(f'{sftp_username}:\n')
