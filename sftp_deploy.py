@@ -8,6 +8,8 @@
 #       export JIRA_KEY=[your jira API key]
 #   Also review the mapEnv() function to make sure your SFTP Git repo directories are the same
 
+# create a folder called sftp_test on your Desktop.
+
 # 1. if you don't have pip:
 #   - brew install pip
 
