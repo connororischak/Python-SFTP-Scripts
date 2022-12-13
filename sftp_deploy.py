@@ -154,7 +154,7 @@ def mapEnv():
     elif pc_env == 'prod-tor':
         ymlPath = f'{basePath}pdoc_repos/peopledoc-sftp-accounts/host_vars/tor.ucloud.int/eeyore-0.tor.ucloud.int/customers/'
     elif pc_env == 'prod-eu':
-        ymlPath = f'{basePath}pdoc_repos/peopledoc-sftp-accounts/host_vars/de.people-doc.net/eeyore-0.de.people-doc.net/customers/ '
+        ymlPath = f'{basePath}pdoc_repos/peopledoc-sftp-accounts/host_vars/de.people-doc.net/eeyore-0.de.people-doc.net/customers/'
     elif pc_env == 'prod-us':
         ymlPath = f'{basePath}pdoc_repos/peopledoc-sftp-accounts/host_vars/us.people-doc.net/eeyore-000.us.people-doc.net/customers/'
     elif pc_env == 'staging-us':
