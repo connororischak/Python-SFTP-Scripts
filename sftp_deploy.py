@@ -11,7 +11,9 @@
 # create a folder called sftp_test on your Desktop.
 
 # 1. if you don't have pip:
-#   - brew install pip
+#   - brew install python (everyone should have python, pip is included with python)
+#   - to see if you have pip:
+#     pip --version
 
 # 2. Install virtualenv
 #   - pip install virtualenv
