@@ -172,7 +172,7 @@ def doGit():
     print(f'Changing branch to INT-{ticketNo}')
     branchExists = False
     checkBranch = subprocess.run(['git', 'ls-remote', '--exit-code', 'origin', f'INT-{ticketNo}'], stdout=subprocess.DEVNULL).returncode
-    if (checkBranch != 2):
+    if (checkBranch != '2'):
         branchExists = True
         print(f'Found branch INT-{ticketNo}, aborting....')
         if branchExists: quit()
