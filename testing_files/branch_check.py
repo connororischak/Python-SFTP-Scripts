@@ -2,15 +2,16 @@ import os
 import subprocess
 import time
 
-ticketNo = 49470
 
-os.system('cd /Users/ConnorO/pdoc_repos/peopledoc-sftp-accounts/host_vars/atl.ucloud.int/eeyore-0.atl.ucloud.int/customers')
 
-checkBranch = subprocess.run(['git', 'ls-remote', '--exit-code', 'origin', f'INT-{ticketNo}'], stdout=subprocess.DEVNULL)
-print(checkBranch.returncode)
-if (checkBranch.returncode != '2'):
-	branchExists = True
-	print(f'Found branch INT-{ticketNo}, aborting....')
-	if branchExists: quit()
+checkBranch = subprocess.run(['git', 'checkout', '-b', f'branch2'], stdout=subprocess.DEVNULL)
+print(f'Checkout returned with exit code: {checkBranch.returncode}')
+if (checkBranch.returncode == 0):
+	branchExists = False
+	print(f'Branched successfully!')
+	subprocess.run(['git', 'checkout', 'testing_exit_code'])
+	subprocess.run(['git', 'branch', '--delete', 'branch2'])
 else:
-	print('No existing branch found!')
+	print('Could not branch. Branch already exists. aborting....')
+	quit()
+		
