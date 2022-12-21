@@ -36,6 +36,7 @@
 #   - jirashell -s https://people-doc.atlassian.net -u [your-jira-email] -p [your-api-token]
 import datetime
 import os
+import subprocess
 import time
 from jira import JIRA
 
@@ -169,21 +170,28 @@ def doGit():
     time.sleep(1)
     os.system(f'cd {ymlPath}')
     print(f'Changing branch to INT-{ticketNo}')
-    os.system(f'git checkout -b INT-{ticketNo}')
-    os.system('git status')
-    print(f'Staging file: {sftp_username}.yml')
-    time.sleep(1)
-    os.system(f'git add {sftp_username}.yml')
-    os.system('git status')
-    print('Committing changes...')
-    time.sleep(1)
-    message = printCommit()
-    os.system(f'git commit -S -m "{message}"')
-    time.sleep(1)
-    os.system(f'git push --set-upstream origin INT-{ticketNo}')
-    print('Commit pushed! Switching back to master...')
-    time.sleep(1)
-    os.system('git checkout master')
+    branchExists = False
+    checkBranch = subprocess.run(['git', 'ls-remote', '--exit-code', 'origin', f'INT-{ticketNo}'], stdout=subprocess.DEVNULL).returncode
+    if (checkBranch != 2):
+        branchExists = True
+        print(f'Found branch INT-{ticketNo}, aborting....')
+        if branchExists: quit()
+    else:
+        os.system(f'git checkout -b INT-{ticketNo}')
+        os.system('git status')
+        print(f'Staging file: {sftp_username}.yml')
+        time.sleep(1)
+        os.system(f'git add {sftp_username}.yml')
+        os.system('git status')
+        print('Committing changes...')
+        time.sleep(1)
+        message = printCommit()
+        os.system(f'git commit -S -m "{message}"')
+        time.sleep(1)
+        os.system(f'git push --set-upstream origin INT-{ticketNo}')
+        print('Commit pushed! Switching back to master...')
+        time.sleep(1)
+        os.system('git checkout master')
 
 
 
