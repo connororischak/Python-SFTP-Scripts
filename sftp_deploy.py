@@ -102,21 +102,21 @@ def getInfo():
 
 
 def printCommit():
-    output = f'{issue.fields.summary}\nhttps://people-doc.atlassian.net/browse/INT-{ticketNo}\n'
+    output = f''
     command = ''
     if pc_env == 'prod-atl': 
-        command = f'time ansible-playbook sftp_account.yml -l P-ATL-sftp-0 -t account -e "filter_names={sftp_username}"'
+        command = f'time ansible-playbook sftp_account.yml -l P-ATL-sftp-0 -t account -e '
     elif pc_env == 'prod-tor':
-        command = f'time ansible-playbook sftp_account.yml -l P-TOR-sftp-0 -t account -e "filter_names={sftp_username}"'
+        command = f'time ansible-playbook sftp_account.yml -l P-TOR-sftp-0 -t account -e '
     elif pc_env == 'prod-eu':
-        command = f'time ansible-playbook sftp_account.yml -l P-EU-eeyore-0 -t account -e "filter_names={sftp_username}"'
+        command = f'time ansible-playbook sftp_account.yml -l P-EU-eeyore-0 -t account -e '
     elif pc_env == 'prod-us':
-        command = f'time ansible-playbook sftp_account.yml -l P-US-eeyore -t account -e "filter_names={sftp_username}"'
+        command = f'time ansible-playbook sftp_account.yml -l P-US-eeyore -t account -e '
     elif pc_env == 'staging-us':
-        command = f'time ansible-playbook sftp_account.yml -l S-US-eeyore -t account -e "filter_names={sftp_username}"'
+        command = f'time ansible-playbook sftp_account.yml -l S-US-eeyore -t account -e '
     elif pc_env == 'staging-eu':
-        command = f'time ansible-playbook sftp_account.yml -l S-EU-eeyore -t account -e "filter_names={sftp_username}"'
-    return output+command
+        command = f'time ansible-playbook sftp_account.yml -l S-EU-eeyore -t account -e '
+    return f'{issue.fields.summary}\nhttps://people-doc.atlassian.net/browse/INT-{ticketNo}\n{command}\'filter_names={sftp_username}\''
 
 def makeFile():
     global issue
@@ -142,21 +142,6 @@ def makeFile():
         yml.write(f'  - key: "{key[i]}"\n    ticket_date: "{today}"\n    ticket_ref: "https://people-doc.atlassian.net/browse/INT-{ticketNo}"\n')
     print(f'\n\t{sftp_username}.yml created at {ymlPath}')
     yml.close()
-    time.sleep(1)
-    os.system(f'cd {ymlPath}')
-    print(f'Changing branch to INT-{ticketNo}')
-    os.system(f'git checkout -b INT-{ticketNo}')
-    os.system('git status')
-    print(f'Staging file: {sftp_username}.yml')
-    time.sleep(1)
-    os.system(f'git add {sftp_username}.yml')
-    os.system('git status')
-    print('Committing changes...')
-    time.sleep(1)
-    os.system(f'git commit -S -m "{printCommit()}"')
-    time.sleep(1)
-    os.system(f'git push --set-upstream origin INT-{ticketNo}')
-
 
 
 
@@ -180,36 +165,41 @@ def mapEnv():
     print(f'\n[LIVE MODE] YML filepath: {ymlPath}')
 
     
+def doGit():
+    time.sleep(1)
+    os.system(f'cd {ymlPath}')
+    print(f'Changing branch to INT-{ticketNo}')
+    os.system(f'git checkout -b INT-{ticketNo}')
+    os.system('git status')
+    print(f'Staging file: {sftp_username}.yml')
+    time.sleep(1)
+    os.system(f'git add {sftp_username}.yml')
+    os.system('git status')
+    print('Committing changes...')
+    time.sleep(1)
+    message = printCommit()
+    os.system(f'git commit -S -m "{message}"')
+    time.sleep(1)
+    os.system(f'git push --set-upstream origin INT-{ticketNo}')
+    print('Commit pushed! Switching back to master...')
+    time.sleep(1)
+    os.system('git checkout master')
 
 
 
 
-def confirm():
-    global ticketNo
-    resp = ''
-    while resp not in ('Y','N'):
-        resp = input(f'Have you branched? [y/n] ')
-        resp = resp.upper()
-    if resp == 'Y':
-        return True
-    if resp == 'N':
-        print(f'Please branch using git checkout -b INT-{ticketNo} and restart the script.')
-        quit()
-
-
-
-# if runMode.upper() == 'L':
-#     checkedOut = confirm()
 getInfo()
 # run test() to test script, will NOT put file in Git repo
 if runMode.upper() == 'T':
     test()
+    makeFile()
+    print(printCommit())
 # run mapEnv() when doing live run. WILL put file in Git repo
 if runMode.upper() == 'L':
-    #if checkedOut:
     mapEnv()
+    makeFile()
+    doGit()
         
-makeFile()
 
 
 
