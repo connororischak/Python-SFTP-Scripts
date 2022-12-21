@@ -177,6 +177,7 @@ def mapEnv():
 
     
 def doGit():
+    os.system(f'cd {ymlPath}')
     time.sleep(1)
     os.system('git status')
     print(f'Staging file: {sftp_username}.yml')
