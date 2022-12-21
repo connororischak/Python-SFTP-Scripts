@@ -84,7 +84,17 @@ if runMode.upper() == 'T':
 if runMode.upper() == 'L':
     print(f'WARNING: You are in LIVE Mode.\nPlease make sure you are on the correct branch by using:\n\tgit checkout -b INT-{ticketNo}\n')
 
-
+def branchExists():
+    subprocess.run([f'cd', f'{ymlPath}'])
+    checkBranch = subprocess.run(['git', 'checkout', '-b', f'INT-{ticketNo}'], stdout=subprocess.DEVNULL).returncode
+    print(checkBranch)
+    if (checkBranch != 0):
+        print(f'Found existing branch: INT-{ticketNo}. Quitting....')
+        quit()
+    else:
+        print(f'Branched successfully!')
+        return False
+        
 
 def test():
     global ymlPath
@@ -168,30 +178,20 @@ def mapEnv():
     
 def doGit():
     time.sleep(1)
-    os.system(f'cd {ymlPath}')
-    print(f'Changing branch to INT-{ticketNo}')
-    branchExists = False
-    checkBranch = subprocess.run(['git', 'ls-remote', '--exit-code', 'origin', f'INT-{ticketNo}'], stdout=subprocess.DEVNULL).returncode
-    if (checkBranch != '2'):
-        branchExists = True
-        print(f'Found branch INT-{ticketNo}, aborting....')
-        if branchExists: quit()
-    else:
-        os.system(f'git checkout -b INT-{ticketNo}')
-        os.system('git status')
-        print(f'Staging file: {sftp_username}.yml')
-        time.sleep(1)
-        os.system(f'git add {sftp_username}.yml')
-        os.system('git status')
-        print('Committing changes...')
-        time.sleep(1)
-        message = printCommit()
-        os.system(f'git commit -S -m "{message}"')
-        time.sleep(1)
-        os.system(f'git push --set-upstream origin INT-{ticketNo}')
-        print('Commit pushed! Switching back to master...')
-        time.sleep(1)
-        os.system('git checkout master')
+    os.system('git status')
+    print(f'Staging file: {sftp_username}.yml')
+    time.sleep(1)
+    os.system(f'git add {sftp_username}.yml')
+    os.system('git status')
+    print('Committing changes...')
+    time.sleep(1)
+    message = printCommit()
+    os.system(f'git commit -S -m "{message}"')
+    time.sleep(1)
+    os.system(f'git push --set-upstream origin INT-{ticketNo}')
+    print('Commit pushed! Switching back to master...')
+    time.sleep(1)
+    os.system('git checkout master')
 
 
 
@@ -205,8 +205,9 @@ if runMode.upper() == 'T':
 # run mapEnv() when doing live run. WILL put file in Git repo
 if runMode.upper() == 'L':
     mapEnv()
-    makeFile()
-    doGit()
+    if not branchExists():
+        makeFile()
+        doGit()
         
 
 
