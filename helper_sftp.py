@@ -129,8 +129,8 @@ def read():
 def format(items):
     jdate = issue.fields.created
     dates = jdate.split('T')
-    dt = datetime.datetime.strptime(dates[0],"%Y-%m-%d")
-    today = f"{dt.year}-{dt.month}-{dt.day}"
+    dt = datetime.datetime.strptime(dates[0], "%Y-%m-%d")
+    today = str(dt).split(' ')[0]
     entry = ''
     if itemType == 'all':
         if numIP != 0:
